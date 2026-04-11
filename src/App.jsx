@@ -1,7 +1,7 @@
-import Footer from "./components/Footer";
+import FooterComp from "./components/FooterComp";
 
 function App() {
-  return <Footer />;
+  return <FooterComp />;
 }
 
 export default App;

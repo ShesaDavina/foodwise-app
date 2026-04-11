@@ -1,6 +1,6 @@
 import React from "react";
 
-function Footer() {
+function FooterComp() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -22,7 +22,7 @@ function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <h3 className="font-semibold text-lg mb-4">Panduan</h3>
+            <h3 className="text-lg mb-4" style={{ fontFamily: "'Bowlby One', cursive" }}>Panduan</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-white/70 hover:text-white transition text-sm">
@@ -45,7 +45,7 @@ function Footer() {
           <div className="md:col-span-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6">
               <div>
-                <h3 className="font-semibold text-lg mb-4">Social</h3>
+                <h3 className="text-lg mb-4" style={{ fontFamily: "'Bowlby One', cursive" }}>Social</h3>
                 <ul className="space-y-2">
                   <li>
                     <a href="#" className="text-white/70 hover:text-white transition text-sm flex items-center gap-2">
@@ -112,4 +112,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default FooterComp;
