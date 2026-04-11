@@ -1,7 +1,8 @@
-import NavComp from "./components/NavComp";
+
+import PaginationComp from "./components/PaginationComp";
 
 function App() {
-  return <NavComp />;
+  return <PaginationComp />;
 }
 
 export default App;

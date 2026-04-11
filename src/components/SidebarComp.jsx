@@ -14,7 +14,6 @@ import {
   LuX,
 } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
-import logofw from "../assets/logofw.png";
 
 export default function SidebarComp() {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +57,8 @@ export default function SidebarComp() {
         >
           <div>
             <div className="flex items-center justify-center px-2 mb-4 mt-8 md:mt-0">
-              <img src={logofw} className="h-10 object-contain w-auto" alt="FoodWise Logo" />
+              <img src="/images/foodwise.png" 
+              alt="FoodWise Logo" className="h-10 object-contain w-auto"/>
             </div>
 
             <hr className="border-gray-500 mb-6" />
