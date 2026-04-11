@@ -7,7 +7,6 @@ import SemuaData from "../pages/SemuaData";
 import Detail from "../pages/Detail";
 import AddFood from "../pages/AddFood";
 import Layout from "../components/Layout";
-import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -29,11 +28,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
+    element: <Layout />,
     children: [
       {
         path: "dashboard",
