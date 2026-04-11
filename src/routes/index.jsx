@@ -5,8 +5,9 @@ import OauthSuccess from "../pages/OauthSuccess";
 import Dashboard from "../pages/Dashboard";
 import SemuaData from "../pages/SemuaData";
 import Detail from "../pages/Detail";
-import AddFood from "../pages/AddFood"; 
+import AddFood from "../pages/AddFood";
 import Layout from "../components/Layout";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "dashboard",
@@ -47,5 +52,5 @@ export const router = createBrowserRouter([
         element: <AddFood />,
       },
     ],
-  }
+  },
 ]);
