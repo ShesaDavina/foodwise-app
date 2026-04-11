@@ -1,8 +1,12 @@
-
-import PaginationComp from "./components/PaginationComp";
+import Layout from "./components/Layout";
+import Detail from "./pages/Detail";
 
 function App() {
-  return <PaginationComp />;
+  return (
+    <Layout>
+      <Detail/>
+    </Layout>
+  );
 }
 
 export default App;

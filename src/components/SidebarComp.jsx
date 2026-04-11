@@ -42,15 +42,15 @@ export default function SidebarComp() {
         />
       )}
       <div className={`
-        fixed md:static inset-y-0 left-0 z-40
+        fixed md:sticky inset-y-0 left-0 z-40
         transform ${isOpen ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0 transition-transform duration-300 ease-in-out
-        h-screen w-64
+        h-screen w-64 top-0
       `}>
         <Sidebar
           theme={{
             root: {
-              inner: "h-full overflow-y-auto overflow-x-hidden bg-[#2F5D56] py-4 px-3 flex flex-col justify-between shadow-xl md:shadow-none",
+              inner: "h-full overflow-y-auto overflow-x-hidden bg-[#2F5D56]! py-4 px-3 flex flex-col justify-between shadow-xl md:shadow-none",
             },
           }}
           className="w-57"
