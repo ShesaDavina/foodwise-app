@@ -17,7 +17,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 export default function SidebarComp() {
   const [isOpen, setIsOpen] = useState(false);
-  const activePage = "Dashboard"; 
+  const activePage = "Dashboard";  
   const getItemClass = (name) => {
     const isActive = activePage === name;
     return `rounded-lg mb-2 text-white font-semibold transition-all duration-200 

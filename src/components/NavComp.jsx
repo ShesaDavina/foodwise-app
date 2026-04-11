@@ -51,7 +51,7 @@ export default function NavComp() {
           ))}
         </div>
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/login" className="text-white font-bold text-sm hover:text-[#F59E0B]">Sign In</Link>
+          <Link to="/signup" className="text-white font-bold text-sm hover:text-[#F59E0B]">Sign In</Link>
           <Link to="/signup" className="bg-[#F59E0B] text-white px-6 py-2 rounded-full font-bold text-sm shadow-md">Sign Up</Link>
         </div>
 
@@ -84,7 +84,7 @@ export default function NavComp() {
                 </a>
               ))}
               <div className="flex flex-col space-y-3 pt-2">
-                <Link to="/login" onClick={() => setIsOpen(false)} className="text-white text-center font-bold py-2">Sign In</Link>
+                <Link to="/signup" onClick={() => setIsOpen(false)} className="text-white text-center font-bold py-2">Sign In</Link>
                 <Link to="/signup" onClick={() => setIsOpen(false)} className="bg-[#F59E0B] text-white text-center py-2 rounded-full font-bold">Sign Up</Link>
               </div>
             </div>

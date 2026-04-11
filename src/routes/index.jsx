@@ -1,24 +1,29 @@
 import { createBrowserRouter } from "react-router-dom"; // Import fungsi yang benar
 import App from "../App";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup"; 
+import Signup from "../pages/Signup";
+import Guide from "../pages/Guide";
+import OauthSuccess from "../pages/OauthSuccess";
 
 export const router = createBrowserRouter([
-  { 
+  {
     path: "/",
     children: [
       {
-        path: "/", 
-        element: <App />
+        path: "/",
+        element: <App />,
       },
       {
-        path: "/login", 
-        element: <Login />
+        path: "/signup",
+        element: <Signup />,
       },
       {
-        path: "/signup", 
-        element: <Signup />
+        path: "/guide",
+        element: <Guide />,
       },
-    ]
-  }
+      {
+        path: "/oauth-success",
+        element: <OauthSuccess />,
+      },
+    ],
+  },
 ]);
