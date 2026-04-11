@@ -5,7 +5,7 @@ function TableRowList({ data }) {
     return (
         <div className="flex flex-col">
             {data.map((item, index) => (
-                <TableRowComp key={index} item={item} />
+                <TableRowComp key={index} item={item} index={index} />
             ))}
         </div>
     );

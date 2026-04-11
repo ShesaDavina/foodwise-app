@@ -134,7 +134,7 @@ const TambahMakanan = () => {
           <form onSubmit={handleSubmit} className="px-7 py-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div>
-                <label className="block text-[#1F2D3B] text-sm mb-1.5" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                <label className="block text-[#1F2D3B] text-sm mb-1.5" >
                   Nama makanan
                 </label>
                 <input
@@ -145,13 +145,13 @@ const TambahMakanan = () => {
                   placeholder="Makanan / Minuman"
                   className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm ${errors.nama ? 'border-red-400' : 'border-gray-300'
                     }`}
-                  style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                 />
                 {errors.nama && <p className="text-red-500 text-xs mt-1">{errors.nama}</p>}
               </div>
 
               <div>
-                <label className="block text-[#1F2D3B] text-sm mb-1.5" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                <label className="block text-[#1F2D3B] text-sm mb-1.5" >
                   Kategori
                 </label>
                 <div className="relative" ref={dropdownRef}>
@@ -160,7 +160,7 @@ const TambahMakanan = () => {
                       } hover:border-[#2F5D56]`}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <div className="flex items-center gap-2 text-sm" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                    <div className="flex items-center gap-2 text-sm" >
                       {formData.kategori ? (
                         <>
                           <SelectedIcon className="text-[#2F5D56] text-sm" />
@@ -181,7 +181,7 @@ const TambahMakanan = () => {
                         <div
                           key={option.value}
                           className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#FFE4C7] cursor-pointer transition-colors text-sm"
-                          style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                           onClick={() => handleKategoriSelect(option.value)}
                         >
                           <option.icon className="text-[#2F5D56] text-sm" />
@@ -197,7 +197,7 @@ const TambahMakanan = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div>
-                <label className="block text-[#1F2D3B] text-sm mb-1.5" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                <label className="block text-[#1F2D3B] text-sm mb-1.5" >
                   Tanggal Beli
                 </label>
                 <input
@@ -207,12 +207,12 @@ const TambahMakanan = () => {
                   onChange={handleChange}
                   className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm ${errors.tanggalBeli ? 'border-red-400' : 'border-gray-300'
                     }`}
-                  style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                 />
                 {errors.tanggalBeli && <p className="text-red-500 text-xs mt-1">{errors.tanggalBeli}</p>}
               </div>
               <div>
-                <label className="block text-[#1F2D3B] text-sm mb-1.5" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                <label className="block text-[#1F2D3B] text-sm mb-1.5" >
                   Tanggal Kadaluarsa
                 </label>
                 <input
@@ -222,7 +222,7 @@ const TambahMakanan = () => {
                   onChange={handleChange}
                   className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm ${errors.tanggalKadaluarsa ? 'border-red-400' : 'border-gray-300'
                     }`}
-                  style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                 />
                 {errors.tanggalKadaluarsa && <p className="text-red-500 text-xs mt-1">{errors.tanggalKadaluarsa}</p>}
               </div>
@@ -230,7 +230,7 @@ const TambahMakanan = () => {
 
             {/* Total Section - Input angka dulu, baru pilih satuan */}
             <div className="mb-7">
-              <label className="block text-[#1F2D3B] text-sm mb-1.5" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+              <label className="block text-[#1F2D3B] text-sm mb-1.5" >
                 Total
               </label>
               <div className="flex gap-3">
@@ -244,7 +244,7 @@ const TambahMakanan = () => {
                     placeholder="Jumlah"
                     className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm ${errors.jumlah ? 'border-red-400' : 'border-gray-300'
                       }`}
-                    style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                   />
                   {errors.jumlah && <p className="text-red-500 text-xs mt-1">{errors.jumlah}</p>}
                 </div>
@@ -256,7 +256,7 @@ const TambahMakanan = () => {
                       } hover:border-[#2F5D56]`}
                     onClick={() => setIsSatuanDropdownOpen(!isSatuanDropdownOpen)}
                   >
-                    <span className="text-sm" style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}>
+                    <span className="text-sm" >
                       {formData.satuan === 'pcs' ? 'pcs' : 'kg'}
                     </span>
                     <svg className={`w-4 h-4 text-[#2F5D56] transition-transform ${isSatuanDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -270,7 +270,7 @@ const TambahMakanan = () => {
                         <div
                           key={option.value}
                           className="px-4 py-2.5 hover:bg-[#FFE4C7] cursor-pointer transition-colors text-sm text-center"
-                          style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
                           onClick={() => handleSatuanSelect(option.value)}
                         >
                           {option.label}
@@ -285,7 +285,7 @@ const TambahMakanan = () => {
             <button
               type="submit"
               className="w-full bg-[#2F5D56] hover:bg-[#1F2D3B] text-white py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-md"
-              style={{ fontFamily: 'Jomolhari, serif', fontWeight: 'normal' }}
+
             >
               <FaPlusCircle className="text-white text-base" />
               Tambah

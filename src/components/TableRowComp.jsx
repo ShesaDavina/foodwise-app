@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { LuFileSearch } from "react-icons/lu";
 
-function TableRowComp({ item }) {
+function TableRowComp({ item, index }) {
+    const navigate = useNavigate();
+
     // Fungsi untuk cek apakah sudah kadaluarsa
     const isExpired = (tanggalKadaluarsa) => {
         const today = new Date();
@@ -16,6 +19,10 @@ function TableRowComp({ item }) {
     const expired = isExpired(item.kadaluarsa);
     const statusColor = expired ? "bg-red-300" : "bg-blue-300";
     const statusText = expired ? "Kadaluarsa" : "Masih Aman";
+
+    const handleDetailClick = () => {
+        navigate(`/detail/${index}`);
+    };
 
     return (
         <div className="bg-white shadow-md border-5 border-[#FFF1DF] rounded-2xl mb-3">
@@ -33,8 +40,8 @@ function TableRowComp({ item }) {
                 <div className="text-sm text-gray-700">{item.kadaluarsa}</div>
                 <div className="text-sm text-gray-700">{item.total}</div>
                 <div>
-                    <button 
-                        onClick={() => console.log("Detail:", item)}
+                    <button
+                        onClick={handleDetailClick}
                         className="text-[#2e5b4e] hover:text-[#1f4036] transition-colors"
                     >
                         <LuFileSearch size={20} />
@@ -52,8 +59,8 @@ function TableRowComp({ item }) {
                         ></div>
                         <span className="text-xs text-gray-500">{statusText}</span>
                     </div>
-                    <button 
-                        onClick={() => console.log("Detail:", item)}
+                    <button
+                        onClick={handleDetailClick}
                         className="text-[#2e5b4e]"
                     >
                         <LuFileSearch size={18} />

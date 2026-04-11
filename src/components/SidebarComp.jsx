@@ -14,29 +14,48 @@ import {
   LuX,
 } from "react-icons/lu";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function SidebarComp() {
   const [isOpen, setIsOpen] = useState(false);
-  const activePage = "Dashboard"; 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Tentukan halaman aktif berdasarkan path URL
+  const getActivePage = () => {
+    const path = location.pathname;
+    if (path === "/" || path === "/dashboard") return "Dashboard";
+    if (path === "/foods" || path === "/foods/add" || path === "/foods/add") return "Tambah Makanan";
+    if (path === "/persentase") return "Presentase Bulanan";
+    return "Dashboard";
+  };
+
+  const activePage = getActivePage();
+
   const getItemClass = (name) => {
     const isActive = activePage === name;
     return `rounded-lg mb-2 text-white font-semibold transition-all duration-200 
-      ${isActive 
-        ? "bg-[#F59E0B] hover:bg-[#D97706]" 
+      ${isActive
+        ? "bg-[#F59E0B] hover:bg-[#D97706]"
         : "hover:bg-[#F59E0B] bg-transparent"
       }`;
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsOpen(false);
+  };
+
   return (
     <>
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 md:hidden p-2 bg-[#2F5D56] text-white rounded-md shadow-lg"
       >
         {isOpen ? <LuX size={24} /> : <LuMenu size={24} />}
       </button>
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
         />
@@ -57,8 +76,8 @@ export default function SidebarComp() {
         >
           <div>
             <div className="flex items-center justify-center px-2 mb-4 mt-8 md:mt-0">
-              <img src="/images/foodwise.png" 
-              alt="FoodWise Logo" className="h-10 object-contain w-auto"/>
+              <img src="/images/foodwise.png"
+                alt="FoodWise Logo" className="h-10 object-contain w-auto" />
             </div>
 
             <hr className="border-gray-500 mb-6" />
@@ -66,7 +85,7 @@ export default function SidebarComp() {
             <SidebarItems>
               <SidebarItemGroup className="border-none">
                 <SidebarItem
-                  href="#"
+                  onClick={() => handleNavigation("/")}
                   icon={() => <LuLayoutDashboard className="text-xl text-inherit" />}
                   className={getItemClass("Dashboard")}
                 >
@@ -74,7 +93,7 @@ export default function SidebarComp() {
                 </SidebarItem>
 
                 <SidebarItem
-                  href="#"
+                  onClick={() => handleNavigation("/foods")}
                   icon={() => <LuCirclePlus className="text-xl text-inherit" />}
                   className={getItemClass("Tambah Makanan")}
                 >
@@ -82,7 +101,7 @@ export default function SidebarComp() {
                 </SidebarItem>
 
                 <SidebarItem
-                  href="#"
+                  onClick={() => handleNavigation("/persentase")}
                   icon={() => <LuChartNoAxesCombined className="text-xl text-inherit" />}
                   className={getItemClass("Presentase Bulanan")}
                 >
@@ -102,7 +121,7 @@ export default function SidebarComp() {
                   <span className="text-sm font-semibold truncate w-24">Zhao Yu Fan</span>
                 </div>
               </div>
-              <button 
+              <button
                 title="Logout"
                 className="p-2 hover:bg-red-500 rounded-full transition-colors group"
               >

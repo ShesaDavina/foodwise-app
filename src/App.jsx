@@ -1,14 +1,8 @@
-import Layout from "./components/Layout";
-// import Detail from "./pages/Detail";
-import AddFood from "./pages/AddFood";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/index";
 
 function App() {
-  return (
-    <Layout>
-      {/* <Detail/> */}
-      <AddFood/>
-    </Layout>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

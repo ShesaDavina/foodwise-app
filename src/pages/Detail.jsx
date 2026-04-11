@@ -32,7 +32,7 @@ function Detail() {
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto">
+        <div className="w-full max-w-3xl mx-auto">
             {/* Header */}
             <div className="md:my-6 mt-16 md:mt-6 mb-8">
                 <h1
@@ -87,7 +87,7 @@ function Detail() {
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-gray-200 my-8"></div>
+                    <div className="my-8"></div>
 
                     {/* Pertanyaan - Tengah */}
                     <div className="mb-6 text-center">

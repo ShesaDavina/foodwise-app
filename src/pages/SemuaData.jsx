@@ -2,10 +2,12 @@ import { useState } from "react";
 import TableComp from "../components/TableComp";
 import { LuCirclePlus } from "react-icons/lu";
 import PaginationComp from "../components/PaginationComp";
+import { useNavigate } from "react-router-dom";
 
 function SemuaData() {
     const [activeFilter, setActiveFilter] = useState("semua");
-    
+    const navigate = useNavigate();
+
     const allData = [
         {
             nama: "Susu",
@@ -66,10 +68,10 @@ function SemuaData() {
         const expiredDate = new Date(tanggalKadaluarsa);
         today.setHours(0, 0, 0, 0);
         expiredDate.setHours(0, 0, 0, 0);
-        
+
         const diffTime = expiredDate - today;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         // 1-3 hari sebelum kadaluarsa (belum termasuk hari ini)
         return diffDays <= 3 && diffDays > 0;
     };
@@ -90,12 +92,14 @@ function SemuaData() {
     const filteredData = getFilteredData();
     const showAddButton = activeFilter === "semua";
 
+    const handleNavigation = (path) => { navigate(path); };
+
     return (
         <div className="w-full">
             {/* Header dengan filter buttons dan tambah makanan */}
             <div className="md:my-6 mb-4 mt-16 md:mt-6">
-                <h1 
-                    className="text-2xl text-[#2e5b4e]" 
+                <h1
+                    className="text-2xl text-[#2e5b4e]"
                     style={{ fontFamily: "'Bowlby One', cursive" }}
                 >
                     Data Makanan / Minuman
@@ -106,21 +110,19 @@ function SemuaData() {
             <div className="flex gap-2 mb-6 border-b border-gray-200">
                 <button
                     onClick={() => setActiveFilter("semua")}
-                    className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                        activeFilter === "semua"
+                    className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "semua"
                             ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
                             : "text-gray-500 hover:text-[#2e5b4e]"
-                    }`}
+                        }`}
                 >
                     Semua
                 </button>
                 <button
                     onClick={() => setActiveFilter("hampir_kadaluarsa")}
-                    className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                        activeFilter === "hampir_kadaluarsa"
+                    className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "hampir_kadaluarsa"
                             ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
                             : "text-gray-500 hover:text-[#2e5b4e]"
-                    }`}
+                        }`}
                 >
                     Hampir Kadaluarsa
                 </button>
@@ -128,23 +130,23 @@ function SemuaData() {
 
             {/* Tombol Tambah Makanan - hanya muncul di tab "semua" */}
             {showAddButton && (
-                <button 
-                    onClick={() => console.log("Tambah Data")}
+                <button
+                    onClick={() => handleNavigation("/foods/add")}
                     className="cursor-pointer text-[#F59E0B] hover:text-[#f3bc5e] font-bold px-4 py-2 rounded-lg flex items-center gap-2 transition-colors my-6 ml-auto"
                 >
-                    <LuCirclePlus size={23}/>
+                    <LuCirclePlus size={23} />
                     Tambah Data
                 </button>
             )}
 
             {/* Table */}
             <TableComp data={filteredData} />
-            
+
             {/* Info jumlah data */}
             <div className="mt-4 text-sm text-gray-500">
                 Menampilkan {filteredData.length} dari {allData.length} data
             </div>
-            <PaginationComp/>
+            <PaginationComp />
         </div>
     );
 }
