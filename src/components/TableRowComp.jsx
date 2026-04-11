@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LuFileSearch } from "react-icons/lu";
 
-function TableRowComp({ item, index }) {
+function TableRowComp({ item }) {
     const navigate = useNavigate();
 
     // Fungsi untuk cek apakah sudah kadaluarsa
@@ -21,7 +21,8 @@ function TableRowComp({ item, index }) {
     const statusText = expired ? "Kadaluarsa" : "Masih Aman";
 
     const handleDetailClick = () => {
-        navigate(`/detail/${index}`);
+        console.log('Navigating to detail with id:', item.id);  // ← Tambah log
+        navigate(`/detail/${item.id}`);
     };
 
     return (

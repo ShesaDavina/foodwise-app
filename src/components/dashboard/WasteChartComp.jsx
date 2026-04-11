@@ -19,17 +19,27 @@ ChartJS.register(
   Legend
 );
 
-function WasteChartComp() {
+function WasteChartComp({ chartData }) {
+  // Default data jika chartData belum ada atau kosong
+  const defaultLabels = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"];
+  const defaultPcs = [0, 0, 0, 0, 0, 0];
+  const defaultKg = [0, 0, 0, 0, 0, 0];
+
+  // Gunakan data dari props jika ada, jika tidak pakai default
+  const labels = chartData?.labels || defaultLabels;
+  const pcsData = chartData?.pcs || defaultPcs;
+  const kgData = chartData?.kg || defaultKg;
+
   const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+    labels: labels,
     datasets: [
       {
         label: "Terbuang (pcs)",
-        data: [12, 8, 15, 10, 7, 5],
+        data: pcsData,
         backgroundColor: (context) => {
           const chart = context.chart;
-          const {ctx, chartArea} = chart;
-          if (!chartArea) return null;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return "#F59E0B";
           const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
           gradient.addColorStop(0, "#F59E0B");
           gradient.addColorStop(1, "#FDE68A");
@@ -41,11 +51,11 @@ function WasteChartComp() {
       },
       {
         label: "Terbuang (kg)",
-        data: [2, 3, 5, 4, 6, 3],
+        data: kgData,
         backgroundColor: (context) => {
           const chart = context.chart;
-          const {ctx, chartArea} = chart;
-          if (!chartArea) return null;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return "#2F5D56";
           const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
           gradient.addColorStop(0, "#2F5D56");
           gradient.addColorStop(1, "#56ADA0");
@@ -65,10 +75,7 @@ function WasteChartComp() {
       legend: {
         position: "top",
         labels: {
-          font: {
-            family: "'Jomolhari', serif",
-            size: 10,
-          },
+          font: { family: "'Jomolhari', serif", size: 10 },
           usePointStyle: true,
           boxWidth: 6,
           padding: 8,
@@ -76,42 +83,29 @@ function WasteChartComp() {
       },
       tooltip: {
         backgroundColor: "#2F5D56",
-        titleFont: {
-          family: "'Jomolhari', serif",
-          size: 12,
-        },
-        bodyFont: {
-          family: "'Jomolhari', serif",
-          size: 11,
-        },
+        titleFont: { family: "'Jomolhari', serif", size: 12 },
+        bodyFont: { family: "'Jomolhari', serif", size: 11 },
       },
     },
     scales: {
       y: {
         beginAtZero: true,
-        grid: {
-          color: "#E5E7EB",
-        },
+        grid: { color: "#E5E7EB" },
         title: {
           display: true,
           text: "Jumlah Terbuang",
-          font: {
-            family: "'Jomolhari', serif",
-            size: 10,
-          },
+          font: { family: "'Jomolhari', serif", size: 10 },
         },
       },
       x: {
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
       },
     },
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6 w-full overflow-hidden">
-      <h3 className="text-base sm:text-lg font-semibold text-[#1F2D3B] mb-3 sm:mb-4" style={{ fontFamily: "'Bowlby One', cursive" }}>
+      <h3 className="text-base sm:text-lg text-[#2e5b4e] mb-3 sm:mb-4" style={{ fontFamily: "'Bowlby One', cursive" }}>
         Presentase Makanan Terbuang
       </h3>
       <div className="h-64 sm:h-80 w-full">

@@ -1,102 +1,85 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 import TableComp from "../components/TableComp";
 import { LuCirclePlus } from "react-icons/lu";
 import PaginationComp from "../components/PaginationComp";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function SemuaData() {
-    const [activeFilter, setActiveFilter] = useState("semua");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [activeFilter, setActiveFilter] = useState(searchParams.get("filter") || "semua");
+    const [foods, setFoods] = useState([]);
+    const [meta, setMeta] = useState({
+        current_page: 1,
+        last_page: 1,
+        per_page: 10,
+        total: 0,
+        from: 0,
+        to: 0
+    });
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const allData = [
-        {
-            nama: "Susu",
-            kategori: "Minuman",
-            tanggalBeli: "2 April 2026",
-            kadaluarsa: "9 April 2026",
-            total: "2 Pcs"
-        },
-        {
-            nama: "Roti",
-            kategori: "Makanan",
-            tanggalBeli: "10 April 2026",
-            kadaluarsa: "23 April 2026",
-            total: "5 Pcs"
-        },
-        {
-            nama: "Dimsum Frozen",
-            kategori: "Makanan Olahan",
-            tanggalBeli: "28 Februari 2026",
-            kadaluarsa: "2 April 2026",
-            total: "2 Kg"
-        },
-        {
-            nama: "Mangga",
-            kategori: "Buah",
-            tanggalBeli: "7 Februari 2026",
-            kadaluarsa: "2 Mei 2026",
-            total: "4 Kg"
-        },
-        {
-            nama: "Apel",
-            kategori: "Buah",
-            tanggalBeli: "1 Maret 2026",
-            kadaluarsa: "15 Maret 2026",
-            total: "3 Kg"
-        },
-        {
-            nama: "Daging Sapi",
-            kategori: "Daging",
-            tanggalBeli: "5 April 2026",
-            kadaluarsa: "12 April 2026",
-            total: "1 Kg"
-        }
-    ];
+    useEffect(() => {
+        fetchFoods();
+    }, [activeFilter]);
 
-    // Fungsi untuk cek apakah sudah kadaluarsa
-    const isExpired = (tanggalKadaluarsa) => {
-        const today = new Date();
-        const expiredDate = new Date(tanggalKadaluarsa);
-        today.setHours(0, 0, 0, 0);
-        expiredDate.setHours(0, 0, 0, 0);
-        return expiredDate < today;
-    };
-
-    // Fungsi untuk cek apakah dalam 3 hari sebelum kadaluarsa (belum expired)
-    const isWithinThreeDays = (tanggalKadaluarsa) => {
-        const today = new Date();
-        const expiredDate = new Date(tanggalKadaluarsa);
-        today.setHours(0, 0, 0, 0);
-        expiredDate.setHours(0, 0, 0, 0);
-
-        const diffTime = expiredDate - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        // 1-3 hari sebelum kadaluarsa (belum termasuk hari ini)
-        return diffDays <= 3 && diffDays > 0;
-    };
-
-    // Filter data untuk "Hampir Kadaluarsa"
-    const getFilteredData = () => {
-        if (activeFilter === "hampir_kadaluarsa") {
-            return allData.filter(item => {
-                const expired = isExpired(item.kadaluarsa);
-                const withinThreeDays = isWithinThreeDays(item.kadaluarsa);
-                // Tampilkan yang sudah expired ATAU yang dalam 3 hari sebelum kadaluarsa
-                return expired || withinThreeDays;
+    const fetchFoods = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get('http://localhost:8000/api/foods', {
+                params: {
+                    filter: activeFilter,
+                    per_page: 10
+                }
             });
+            
+            console.log('Foods response:', response.data);
+            
+            setFoods(response.data.data || []);
+            setMeta(response.data.meta || {
+                current_page: 1,
+                last_page: 1,
+                per_page: 10,
+                total: 0,
+                from: 0,
+                to: 0
+            });
+        } catch (error) {
+            console.error('Error fetching foods:', error);
+            console.error('Error response:', error.response);
+        } finally {
+            setLoading(false);
         }
-        return allData;
     };
 
-    const filteredData = getFilteredData();
+    const handleFilterChange = (filter) => {
+        setActiveFilter(filter);
+        setSearchParams({ filter: filter });
+    };
+
     const showAddButton = activeFilter === "semua";
 
-    const handleNavigation = (path) => { navigate(path); };
+    const handleNavigation = (path) => { 
+        navigate(path); 
+    };
+
+    if (loading) {
+        return (
+            <div className="w-full">
+                <div className="md:my-6 mb-4 mt-16 md:mt-6">
+                    <h1 className="text-2xl text-[#2e5b4e]" style={{ fontFamily: "'Bowlby One', cursive" }}>
+                        Data Makanan / Minuman
+                    </h1>
+                </div>
+                <div className="text-center p-8">Loading...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full">
-            {/* Header dengan filter buttons dan tambah makanan */}
+            {/* Header */}
             <div className="md:my-6 mb-4 mt-16 md:mt-6">
                 <h1
                     className="text-2xl text-[#2e5b4e]"
@@ -109,7 +92,7 @@ function SemuaData() {
             {/* Filter Buttons */}
             <div className="flex gap-2 mb-6 border-b border-gray-200">
                 <button
-                    onClick={() => setActiveFilter("semua")}
+                    onClick={() => handleFilterChange("semua")}
                     className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "semua"
                             ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
                             : "text-gray-500 hover:text-[#2e5b4e]"
@@ -118,7 +101,7 @@ function SemuaData() {
                     Semua
                 </button>
                 <button
-                    onClick={() => setActiveFilter("hampir_kadaluarsa")}
+                    onClick={() => handleFilterChange("hampir_kadaluarsa")}
                     className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "hampir_kadaluarsa"
                             ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
                             : "text-gray-500 hover:text-[#2e5b4e]"
@@ -128,7 +111,7 @@ function SemuaData() {
                 </button>
             </div>
 
-            {/* Tombol Tambah Makanan - hanya muncul di tab "semua" */}
+            {/* Tombol Tambah Makanan */}
             {showAddButton && (
                 <button
                     onClick={() => handleNavigation("/foods/add")}
@@ -140,13 +123,26 @@ function SemuaData() {
             )}
 
             {/* Table */}
-            <TableComp data={filteredData} />
+            {foods.length > 0 ? (
+                <TableComp data={foods} />
+            ) : (
+                <div className="bg-white rounded-2xl shadow-md p-8 text-center">
+                    <p className="text-gray-500">Tidak ada data makanan</p>
+                </div>
+            )}
 
             {/* Info jumlah data */}
             <div className="mt-4 text-sm text-gray-500">
-                Menampilkan {filteredData.length} dari {allData.length} data
+                Menampilkan {meta.from || 0} - {meta.to || 0} dari {meta.total || 0} data
             </div>
-            <PaginationComp />
+            
+            {/* Pagination */}
+            {meta.last_page > 1 && (
+                <PaginationComp meta={meta} onPageChange={(page) => {
+                    // Implementasi pagination nanti
+                    console.log('Go to page:', page);
+                }} />
+            )}
         </div>
     );
 }
