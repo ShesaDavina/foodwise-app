@@ -1,10 +1,14 @@
 import Layout from "./components/Layout";
-import Detail from "./pages/Detail";
+// import Detail from "./pages/Detail";
+import AddFood from "./pages/AddFood";
 
 function App() {
   return (
     <Layout>
-      <Detail/>
+      {/* <Detail/> */}
+      <AddFood/>
     </Layout>
   );
 }
+
+export default App;
