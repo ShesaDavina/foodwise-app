@@ -1,16 +1,11 @@
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
-export default function PaginationComp({
-  totalPosts,
-  postsPerPage,
-  currentPage,
-  setCurrentPage,
-}) {
+export default function PaginationComp({totalPosts, postsPerPage, currentPage, setCurrentPage}) {
   const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
   const pageNumbers = [1, 2, 3, 4, 5];
-//   for (let i = 1; i <= totalPages; i++) {
-//     pageNumbers.push(i);
-//   }
+  //   for (let i = 1; i <= totalPages; i++) {
+  //     pageNumbers.push(i);
+  //   }
 
   return (
     <div className="flex justify-center mt-5 mb-5">
@@ -31,7 +26,7 @@ export default function PaginationComp({
                 ${
                   currentPage === number
                     ? "bg-[#2F5D56] text-white scale-110 shadow-md"
-                    : "text-gray-700 hover:bg-[#2F5D56] hover:text-white" 
+                    : "text-gray-700 hover:bg-[#2F5D56] hover:text-white"
                 }`}
             >
               {number}
