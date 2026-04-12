@@ -2,26 +2,50 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LuFileSearch } from "react-icons/lu";
 
-function TableRowComp({ item }) {
+function TableRowComp({ item, index }) {
     const navigate = useNavigate();
 
     // Fungsi untuk cek apakah sudah kadaluarsa
     const isExpired = (tanggalKadaluarsa) => {
+        if (!tanggalKadaluarsa || tanggalKadaluarsa === 'N/A') return false;
         const today = new Date();
         const expiredDate = new Date(tanggalKadaluarsa);
-
         today.setHours(0, 0, 0, 0);
         expiredDate.setHours(0, 0, 0, 0);
-
         return expiredDate < today;
     };
 
+    // Fungsi untuk cek apakah dalam 3 hari sebelum kadaluarsa (H-3)
+    const isNearExpiry = (tanggalKadaluarsa) => {
+        if (!tanggalKadaluarsa || tanggalKadaluarsa === 'N/A') return false;
+        const today = new Date();
+        const expiredDate = new Date(tanggalKadaluarsa);
+        today.setHours(0, 0, 0, 0);
+        expiredDate.setHours(0, 0, 0, 0);
+
+        const diffTime = expiredDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        // H-3: 1-3 hari sebelum kadaluarsa (belum expired)
+        return diffDays <= 3 && diffDays > 0;
+    };
+
     const expired = isExpired(item.kadaluarsa);
-    const statusColor = expired ? "bg-red-300" : "bg-blue-300";
-    const statusText = expired ? "Kadaluarsa" : "Masih Aman";
+    const nearExpiry = isNearExpiry(item.kadaluarsa);
+
+    // Tentukan warna status (HANYA BULAT)
+    let statusColor = "bg-[#DBEAFE]"; // default aman
+    let statusText = "Masih Aman";
+
+    if (expired) {
+        statusColor = "bg-[#FF9090]";
+        statusText = "Kadaluarsa";
+    } else if (nearExpiry) {
+        statusColor = "bg-[#FECACA]";
+        statusText = "Hampir Kadaluarsa";
+    }
 
     const handleDetailClick = () => {
-        console.log('Navigating to detail with id:', item.id);  // ← Tambah log
         navigate(`/detail/${item.id}`);
     };
 
@@ -68,7 +92,6 @@ function TableRowComp({ item }) {
                     </button>
                 </div>
 
-                {/* Info Baris */}
                 <div className="space-y-2">
                     <div className="flex justify-between items-center">
                         <span className="text-xs text-gray-400 font-medium">Nama</span>
@@ -84,9 +107,7 @@ function TableRowComp({ item }) {
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xs text-gray-400 font-medium">Kadaluarsa</span>
-                        <span className="text-gray-700">
-                            {item.kadaluarsa}
-                        </span>
+                        <span className="text-sm text-gray-700">{item.kadaluarsa}</span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xs text-gray-400 font-medium">Total</span>

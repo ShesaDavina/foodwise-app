@@ -7,6 +7,7 @@ import SemuaData from "../pages/SemuaData";
 import Detail from "../pages/Detail";
 import AddFood from "../pages/AddFood";
 import Layout from "../components/Layout";
+import Presentase from "../pages/Presentase"
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: "foods/add",
         element: <AddFood />,
+      },
+      {
+        path: "persentase",
+        element: <Presentase />,
       },
     ],
   },

@@ -1,67 +1,76 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from "../utils/axios";
 import TableComp from "../components/TableComp";
 import { LuCirclePlus } from "react-icons/lu";
 import PaginationComp from "../components/PaginationComp";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAlert } from "../contexts/AlertContext";
 
 function SemuaData() {
+    const { showAlert } = useAlert();
     const [searchParams, setSearchParams] = useSearchParams();
     const [activeFilter, setActiveFilter] = useState(searchParams.get("filter") || "semua");
+    const [currentPage, setCurrentPage] = useState(1);
     const [foods, setFoods] = useState([]);
-    const [meta, setMeta] = useState({
-        current_page: 1,
-        last_page: 1,
-        per_page: 10,
-        total: 0,
-        from: 0,
-        to: 0
-    });
+    const [meta, setMeta] = useState({});
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    // Handle filter change
+    const handleFilterChange = (filter) => {
+        setActiveFilter(filter);
+        setCurrentPage(1); // Reset ke halaman 1
+        setSearchParams({ filter: filter });
+    };
+
+    // Sync filter dengan URL params
+    useEffect(() => {
+        const filter = searchParams.get("filter");
+        if (filter && filter !== activeFilter) {
+            setActiveFilter(filter);
+            setCurrentPage(1);
+        }
+    }, [searchParams]);
+
+    // Fetch foods ketika filter atau halaman berubah
     useEffect(() => {
         fetchFoods();
-    }, [activeFilter]);
+    }, [activeFilter, currentPage]);
 
     const fetchFoods = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/foods', {
+            const response = await axios.get('/foods', {
                 params: {
                     filter: activeFilter,
-                    per_page: 10
+                    per_page: 10,
+                    page: currentPage
                 }
             });
-            
-            console.log('Foods response:', response.data);
-            
+            console.log('Response meta:', response.data.meta);
             setFoods(response.data.data || []);
-            setMeta(response.data.meta || {
-                current_page: 1,
-                last_page: 1,
-                per_page: 10,
-                total: 0,
-                from: 0,
-                to: 0
-            });
+            setMeta(response.data.meta || {});
         } catch (error) {
             console.error('Error fetching foods:', error);
-            console.error('Error response:', error.response);
+            if (error.response?.status === 401) {
+                navigate('/signup');
+            }
         } finally {
             setLoading(false);
         }
     };
 
-    const handleFilterChange = (filter) => {
-        setActiveFilter(filter);
-        setSearchParams({ filter: filter });
+    // Handle page change
+    const handlePageChange = (page) => {
+        console.log('Page changed to:', page); // Debug
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const showAddButton = activeFilter === "semua";
 
-    const handleNavigation = (path) => { 
-        navigate(path); 
+    const handleNavigation = (path) => {
+        navigate(path);
     };
 
     if (loading) {
@@ -94,8 +103,8 @@ function SemuaData() {
                 <button
                     onClick={() => handleFilterChange("semua")}
                     className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "semua"
-                            ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
-                            : "text-gray-500 hover:text-[#2e5b4e]"
+                        ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
+                        : "text-gray-500 hover:text-[#2e5b4e]"
                         }`}
                 >
                     Semua
@@ -103,8 +112,8 @@ function SemuaData() {
                 <button
                     onClick={() => handleFilterChange("hampir_kadaluarsa")}
                     className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${activeFilter === "hampir_kadaluarsa"
-                            ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
-                            : "text-gray-500 hover:text-[#2e5b4e]"
+                        ? "text-[#2e5b4e] border-b-2 border-[#2e5b4e]"
+                        : "text-gray-500 hover:text-[#2e5b4e]"
                         }`}
                 >
                     Hampir Kadaluarsa
@@ -135,13 +144,15 @@ function SemuaData() {
             <div className="mt-4 text-sm text-gray-500">
                 Menampilkan {meta.from || 0} - {meta.to || 0} dari {meta.total || 0} data
             </div>
-            
+
             {/* Pagination */}
-            {meta.last_page > 1 && (
-                <PaginationComp meta={meta} onPageChange={(page) => {
-                    // Implementasi pagination nanti
-                    console.log('Go to page:', page);
-                }} />
+            {meta.total > 10 && (
+                <PaginationComp
+                    totalPosts={meta.total || 0}
+                    postsPerPage={10}
+                    currentPage={currentPage}
+                    setCurrentPage={handlePageChange}
+                />
             )}
         </div>
     );

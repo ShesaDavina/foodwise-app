@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from "../utils/axios";
 import StatsCardComp from "../components/dashboard/StatsCardComp";
 import WasteChartComp from "../components/dashboard/WasteChartComp";
 import TableComp from "../components/TableComp";
@@ -21,36 +21,47 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Ambil nama user dari localStorage atau state
+  const [userName, setUserName] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [statsRes, expiringRes, chartRes] = await Promise.all([
-          axios.get('http://localhost:8000/api/dashboard'),
-          axios.get('http://localhost:8000/api/dashboard/expiring-soon'),
-          axios.get('http://localhost:8000/api/dashboard/chart').catch(err => {
+          axios.get('/dashboard'),
+          axios.get('/dashboard/expiring-soon'),
+          axios.get('/dashboard/chart').catch(err => {
             console.warn('Chart API not ready yet:', err);
             return { data: null };
           })
         ]);
-        
+
         console.log('Stats:', statsRes.data);
         console.log('Expiring:', expiringRes.data);
         console.log('Chart:', chartRes.data);
-        
+
         setStats(statsRes.data);
         setApproachingExpiry(expiringRes.data || []);
-        
+
         if (chartRes.data && chartRes.data.labels) {
           setChartData(chartRes.data);
         }
+
+        // Ambil data user (opsional)
+        const userRes = await axios.get('/me');
+        setUserName(userRes.data.name);
+
       } catch (error) {
         console.error('API Error:', error);
+        if (error.response?.status === 401) {
+          navigate('/signup');
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   const apiStats = [
     {
@@ -104,13 +115,13 @@ function Dashboard() {
             </h1>
           </div>
           <p className="text-gray-500 text-xs sm:text-sm mt-1">
-            Selamat datang kembali, Zhao Yu Fan!
+            Selamat datang kembali, {userName || "User"}!
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          {apiStats.map((stat, index) => ( 
+          {apiStats.map((stat, index) => (
             <StatsCardComp
               key={index}
               title={stat.title}

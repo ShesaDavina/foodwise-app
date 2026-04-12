@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 
 function Signup() {
   const handleGoogleLogin = () => {
-    // ✅ BENAR
-    window.location.href = 'http://localhost:8000/api/auth/google';
+    window.location.href = 'http://localhost:8000/auth/google';
   };
 
   return (

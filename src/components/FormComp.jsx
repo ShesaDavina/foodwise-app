@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../contexts/AlertContext';
 import {
   FaAppleAlt,
   FaCarrot,
@@ -17,6 +18,7 @@ import { MdLocalDrink } from 'react-icons/md';
 
 const FormComp = () => {
   const navigate = useNavigate();
+  const { showAlert } = useAlert(); // ← PAKAI HOOK
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nama: '',
@@ -32,7 +34,6 @@ const FormComp = () => {
   const [isSatuanDropdownOpen, setIsSatuanDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const satuanDropdownRef = useRef(null);
-
   // Kategori options sesuai dengan database
   const kategoriOptions = [
     { value: 'Frozen', label: 'Frozen', icon: FaSnowflake },
@@ -50,6 +51,21 @@ const FormComp = () => {
     { value: 'pcs', label: 'pcs' },
     { value: 'kg', label: 'kg' }
   ];
+
+  const [isFruitOrVeg, setIsFruitOrVeg] = useState(false);
+
+  useEffect(() => {
+    const isFruitVeg = formData.kategori === 'Buah' || formData.kategori === 'Sayur';
+    setIsFruitOrVeg(isFruitVeg);
+
+    // Jika kategori berubah ke Buah/Sayur, kosongkan tanggal kadaluarsa
+    if (isFruitVeg) {
+      setFormData(prev => ({ ...prev, tanggalKadaluarsa: '' }));
+      if (errors.tanggalKadaluarsa) {
+        setErrors(prev => ({ ...prev, tanggalKadaluarsa: '' }));
+      }
+    }
+  }, [formData.kategori]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -109,17 +125,16 @@ const FormComp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    
-    // Siapkan data untuk backend - langsung pakai value kategori
+
     const payload = {
       nama: formData.nama,
-      jenis: formData.kategori, // Langsung pakai value dari dropdown
+      jenis: formData.kategori,
       tanggal_beli: formData.tanggalBeli,
       tanggal_kadaluarsa: formData.tanggalKadaluarsa || null,
       jumlah: parseInt(formData.jumlah),
@@ -129,11 +144,12 @@ const FormComp = () => {
     console.log('Sending payload:', payload);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/foods', payload);
+      const response = await axios.post('/foods', payload);
       console.log('Response:', response.data);
-      
-      alert(`✅ ${response.data.message}\nTotal: ${formData.jumlah} ${formData.satuan}`);
-      
+
+      // TAMPILKAN ALERT SUKSES via context
+      showAlert('success', `✅ ${response.data.message} (${formData.jumlah} ${formData.satuan})`);
+
       // Reset form
       setFormData({
         nama: '',
@@ -143,31 +159,31 @@ const FormComp = () => {
         jumlah: '',
         satuan: 'pcs'
       });
-      
-      // Redirect ke halaman SemuaData setelah 1 detik
+
+      // Redirect setelah 1 detik
       setTimeout(() => {
         navigate('/foods');
       }, 1000);
-      
+
     } catch (error) {
       console.error('Error details:', error.response || error);
-      
+
+      // TAMPILKAN ALERT ERROR via context
+      showAlert('error', '❌ Gagal menambahkan makanan. Silakan coba lagi.');
+
       if (error.response && error.response.data && error.response.data.errors) {
         const backendErrors = error.response.data.errors;
         const newErrors = {};
-        
+
         if (backendErrors.nama) newErrors.nama = backendErrors.nama[0];
         if (backendErrors.jenis) newErrors.kategori = backendErrors.jenis[0];
         if (backendErrors.tanggal_beli) newErrors.tanggalBeli = backendErrors.tanggal_beli[0];
         if (backendErrors.tanggal_kadaluarsa) newErrors.tanggalKadaluarsa = backendErrors.tanggal_kadaluarsa[0];
         if (backendErrors.jumlah) newErrors.jumlah = backendErrors.jumlah[0];
-        
+
         setErrors(newErrors);
-        alert('Gagal menambahkan makanan. Silakan periksa kembali form Anda.');
       } else if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message);
-      } else {
-        alert('Gagal menambahkan makanan. Silakan coba lagi.');
+        showAlert('error', `❌ ${error.response.data.message}`);
       }
     } finally {
       setLoading(false);
@@ -277,17 +293,24 @@ const FormComp = () => {
               </div>
               <div>
                 <label className="block text-[#1F2D3B] text-sm mb-1.5">
-                  Tanggal Kadaluarsa (Opsional)
+                  Tanggal Kadaluarsa {isFruitOrVeg && <span className="text-xs text-gray-400">(Otomatis 3 hari setelah beli)</span>}
                 </label>
                 <input
                   type="date"
                   name="tanggalKadaluarsa"
                   value={formData.tanggalKadaluarsa}
                   onChange={handleChange}
-                  disabled={loading}
-                  className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm ${errors.tanggalKadaluarsa ? 'border-red-400' : 'border-gray-300'
-                    } disabled:opacity-50`}
+                  disabled={isFruitOrVeg || loading}  // ← Disabled untuk buah/sayur
+                  className={`w-full px-4 py-2.5 bg-white border rounded-xl outline-none transition-all focus:border-[#2F5D56] text-sm 
+                              ${errors.tanggalKadaluarsa ? 'border-red-400' : 'border-gray-300'}
+                              ${(isFruitOrVeg) ? 'bg-gray-100 cursor-not-allowed' : ''}
+                              disabled:opacity-50`}
                 />
+                {isFruitOrVeg && (
+                  <p className="text-xs text-gray-400 mt-1">
+                    ⏰ Untuk buah & sayur, kadaluarsa otomatis 3 hari setelah tanggal beli
+                  </p>
+                )}
                 {errors.tanggalKadaluarsa && <p className="text-red-500 text-xs mt-1">{errors.tanggalKadaluarsa}</p>}
               </div>
             </div>
