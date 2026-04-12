@@ -1,90 +1,61 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
-  function Signup() {
-    const [formData, setFormData] = useState({
-      name: "",
-      email: "",
-      password: "",
-    });
+function Signup() {
+  const handleGoogleLogin = () => {
+    // ✅ BENAR
+    window.location.href = 'http://localhost:8000/api/auth/google';
+  };
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log(formData);
-    };
-
-    return (
-      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-linear-to-bl from-[#FDE68A] via-white to-[#2F5D56] overflow-x-hidden">
-        <h1
-          className="text-4xl text-[#2e5b4e] mb-6 text-center"
-          style={{ fontFamily: "'Bowlby One', cursive" }}
-        >
-          Welcome!
-        </h1>
-        <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl w-[360px] max-w-[90%] shadow-lg">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <label className="text-sm font-medium">Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Your name"
-              value={formData.name}
-              onChange={handleChange}
-              className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:border-[#2e5b4e]"
-            />
-
-            <label className="text-sm font-medium">Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="email@gmail.com"
-              value={formData.email}
-              onChange={handleChange}
-              className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:border-[#2e5b4e]"
-            />
-
-            <label className="text-sm font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:border-[#2e5b4e]"
-            />
-
-            <button className="mt-2 p-3 rounded-xl bg-[#2e5b4e] text-white text-base cursor-pointer hover:bg-[#1f4036] transition w-full">
-              Sign Up
-            </button>
-          </form>
-
-          <div className="flex items-center my-5">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <span className="px-2 text-sm text-gray-500">Or</span>
-            <div className="flex-1 h-px bg-gray-300"></div>
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#FDE68A] via-white to-[#2F5D56] p-4 md:p-10">
+      <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-5xl flex flex-col md:flex-row overflow-hidden min-h-[550px]">
+        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-between">
+          <div className="max-w-md mx-auto w-full flex-grow flex flex-col justify-center">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#2e5b4e] mb-4 text-left">
+              Masuk atau daftar dalam sekejap
+            </h1>
+            <p className="text-gray-600 text-sm md:text-base mb-8 text-left leading-relaxed">
+              Gunakan akun Google-mu untuk mengakses seluruh fitur <span className="font-bold text-[#2e5b4e]">FoodWise</span> secara gratis.
+            </p>
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center gap-4 p-4 w-full rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all font-semibold text-gray-700 shadow-sm active:scale-[0.98]"
+              >
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  className="w-6"
+                  alt="Google"
+                />
+                Continue with Google
+              </button>
+            </div>
           </div>
-
-          <button className="flex items-center justify-center gap-2 p-3 rounded-xl border border-gray-300 bg-white cursor-pointer hover:bg-gray-50 transition w-full">
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="google"
-              className="w-5 h-5"
-            />
-            Continue with Google
-          </button>
-
-          <p className="text-center mt-4 text-sm">
-            Already have an account?{" "}
-            <a href="#" className="text-[#2e5b4e] no-underline hover:underline">
-              Login
-            </a>
-          </p>
+          <div className="max-w-md mx-auto w-full mt-8 pt-3 border-t border-gray-100">
+            <p className="text-[11px] md:text-xs text-gray-400 leading-relaxed">
+              Kami hanya mengakses data yang diperlukan untuk pengelolaan akun Anda. Dengan melanjutkan, Anda menyetujui{" "}
+              <Link to="/terms" className="text-[#2e5b4e] font-bold hover:underline">
+                Persyaratan Penggunaan
+              </Link>{" "}
+              dan{" "}
+              <Link to="/privacy" className="text-[#2e5b4e] font-bold hover:underline">
+                Kebijakan Privasi
+              </Link> FoodWise.
+            </p>
+          </div>
         </div>
+        <div className="hidden md:block md:w-1/2 relative">
+          <img
+            src="/register.avif"
+            alt="Food Freshness"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/5"></div>
+        </div>
+
       </div>
-    );
-  }
-  export default Signup;
+    </div>
+  );
+}
+
+export default Signup;

@@ -31,21 +31,16 @@ export default function SidebarComp() {
   };
 
   const activePage = getActivePage();
-
-  const getItemClass = (name) => {
-    const isActive = activePage === name;
-    return `rounded-lg mb-2 text-white font-semibold transition-all duration-200 
-      ${isActive
-        ? "bg-[#F59E0B] hover:bg-[#D97706]"
-        : "hover:bg-[#F59E0B] bg-transparent"
-      }`;
-  };
-
   const handleNavigation = (path) => {
     navigate(path);
-    setIsOpen(false);
+    setIsOpen(false); // Tutup sidebar setelah navigasi
   };
 
+  const getItemClass = (page) => {
+    return activePage === page
+      ? "bg-[#2F5D56] text-white scale-110 shadow-md"
+      : "text-gray-300 hover:bg-[#2F5D56] hover:text-white";
+  };
   return (
     <>
       <button
@@ -85,7 +80,7 @@ export default function SidebarComp() {
             <SidebarItems>
               <SidebarItemGroup className="border-none">
                 <SidebarItem
-                  onClick={() => handleNavigation("/")}
+                  onClick={() => handleNavigation("/dashboard")}
                   icon={() => <LuLayoutDashboard className="text-xl text-inherit" />}
                   className={getItemClass("Dashboard")}
                 >
