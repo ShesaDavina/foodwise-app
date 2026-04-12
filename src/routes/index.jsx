@@ -7,7 +7,8 @@ import SemuaData from "../pages/SemuaData";
 import Detail from "../pages/Detail";
 import AddFood from "../pages/AddFood";
 import Layout from "../components/Layout";
-import Presentase from "../pages/Presentase"
+import Presentase from "../pages/Presentase";
+import Guide from "../pages/Guide";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: "/oauth-success",
         element: <OauthSuccess />,
+      },
+      {
+        path: "/guide",
+        element: <Guide />,
       },
     ],
   },
