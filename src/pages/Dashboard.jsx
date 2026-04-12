@@ -5,7 +5,7 @@ import TableComp from "../components/TableComp";
 import { LuBanana, LuCheck, LuTriangleAlert } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-function Dashboard() {
+function Dashboard({ user }) {
   const navigate = useNavigate();
 
   // Data lengkap semua makanan
@@ -152,7 +152,7 @@ function Dashboard() {
                 </h1>
             </div>
           <p className="text-gray-500 text-xs sm:text-sm mt-1">
-            Selamat datang kembali, Zhao Yu Fan!
+            Selamat datang kembali
           </p>
         </div>
 

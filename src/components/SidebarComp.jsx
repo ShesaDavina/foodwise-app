@@ -42,9 +42,20 @@ export default function SidebarComp({ user }) {
       : "text-gray-300 hover:bg-[#F59E0B] hover:text-white";
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/signup");
+  const handleLogout = async () => {
+    try {
+      await fetch("http://127.0.0.1:8000/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      localStorage.removeItem("token");
+      navigate("/signup");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -78,16 +89,19 @@ export default function SidebarComp({ user }) {
               inner:
                 "h-full bg-[#2F5D56] py-4 px-3 flex flex-col justify-between",
             },
+            // BAGIAN INI UNTUK MENGUBAH WARNA ICON MENJADI PUTIH
+            item: {
+              icon: {
+                base: "h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-white",
+                active: "text-white",
+              },
+            },
           }}
         >
           {/* TOP */}
           <div>
             <div className="flex justify-center mb-4 mt-8 md:mt-0">
-              <img
-                src="/images/foodwise.png"
-                alt="logo"
-                className="h-10"
-              />
+              <img src="/images/foodwise.png" alt="logo" className="h-10" />
             </div>
 
             <hr className="border-gray-500 mb-6" />
@@ -127,15 +141,14 @@ export default function SidebarComp({ user }) {
 
             <div className="flex items-center justify-between text-white">
               <div className="flex items-center gap-3">
+                {/* Icon User sudah putih karena parent text-white */}
                 <FaRegUserCircle size={20} />
 
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold">
                     {user?.name || "Loading..."}
                   </span>
-                  <span className="text-xs text-gray-300">
-                    {user?.email}
-                  </span>
+                  <span className="text-xs text-gray-300">{user?.email}</span>
                 </div>
               </div>
 
@@ -143,6 +156,7 @@ export default function SidebarComp({ user }) {
                 onClick={handleLogout}
                 className="p-2 hover:bg-red-500 rounded-full"
               >
+                {/* Icon Logout sudah putih karena parent text-white */}
                 <LuLogOut size={18} />
               </button>
             </div>
@@ -151,4 +165,4 @@ export default function SidebarComp({ user }) {
       </div>
     </>
   );
-} 
+}
