@@ -8,41 +8,36 @@ function Layout() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
-    // kalau ga ada token → balik ke signup
     if (!token) {
       navigate("/signup");
       return;
     }
-
-    // ambil data user dari backend
     fetch("http://127.0.0.1:8000/api/me", {
       headers: {
         Authorization: `Bearer ${token}`,
+        Accept: "application/json",
       },
     })
       .then((res) => {
         if (res.status === 401) {
-          // token invalid → logout
           localStorage.removeItem("token");
           navigate("/signup");
         }
         return res.json();
       })
       .then((data) => {
+        console.log("DATA USER DARI BACKEND:", data);
         setUser(data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   }, [navigate]);
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <SidebarComp user={user} />
-      
-      {/* Main Content */}
+
+      {/* Content */}
       <div className="flex-1">
         <main className="p-4 md:p-6">
           <Outlet />
