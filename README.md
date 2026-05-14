@@ -1,4 +1,5 @@
-# FoodWise Backend: https://github.com/snheels/FoodWise-API.git
+# FoodWise Backend
+https://github.com/snheels/FoodWise-API.git
 
 # FoodWise Frontend
 
